@@ -27,9 +27,21 @@ class ByteBuf(
         return this
     }
 
+    fun putUByte(ub: UByte): ByteBuf {
+        putByte(ub.toByte())
+
+        return this
+    }
+
     fun putShort(s: Short): ByteBuf {
         putByte((s.toInt() shr 8).toByte())
         putByte(s.toByte())
+
+        return this
+    }
+
+    fun putUShort(us: UShort): ByteBuf {
+        putShort(us.toShort())
 
         return this
     }
@@ -39,6 +51,12 @@ class ByteBuf(
         putByte((i shr 16).toByte())
         putByte((i shr 8).toByte())
         putByte(i.toByte())
+
+        return this
+    }
+
+    fun putUInt(ui: UInt): ByteBuf {
+        putInt(ui.toInt())
 
         return this
     }
@@ -56,6 +74,12 @@ class ByteBuf(
         return this
     }
 
+    fun putUVarInt(ui: UInt): ByteBuf {
+        putVarInt(ui.toInt())
+
+        return this
+    }
+
     fun putLong(l: Long): ByteBuf {
         putByte((l shr 56).toByte())
         putByte((l shr 48).toByte())
@@ -69,6 +93,12 @@ class ByteBuf(
         return this
     }
 
+    fun putULong(ul: ULong): ByteBuf {
+        putLong(ul.toLong())
+
+        return this
+    }
+
     fun putVarLong(l: Long): ByteBuf {
         var v = l
 
@@ -78,6 +108,12 @@ class ByteBuf(
         }
 
         putByte((v and 0x7F).toByte())
+
+        return this
+    }
+
+    fun putUVarLong(ul: ULong): ByteBuf {
+        putVarLong(ul.toLong())
 
         return this
     }
@@ -112,10 +148,14 @@ class ByteBuf(
 
     fun getByte(): Byte = buffer[pointer++]
 
+    fun getUByte(): UByte = getByte().toUByte()
+
     fun getShort(): Short = (
             ((getByte().toInt() and 0xFF) shl 8)
                     or (getByte().toInt() and 0xFF)
             ).toShort()
+
+    fun getUShort(): UShort = getShort().toUShort()
 
     fun getInt(): Int = (
             ((getByte().toInt() and 0xFF) shl 24)
@@ -123,6 +163,8 @@ class ByteBuf(
                     or ((getByte().toInt() and 0xFF) shl 8)
                     or (getByte().toInt() and 0xFF)
             )
+
+    fun getUInt(): UInt = getInt().toUInt()
 
     fun getVarInt(): Int {
         var v = 0
@@ -145,6 +187,8 @@ class ByteBuf(
         return v
     }
 
+    fun getUVarInt(): UInt = getVarInt().toUInt()
+
     fun getLong(): Long = (
             ((getByte().toLong() and 0xFF) shl 56)
                     or ((getByte().toLong() and 0xFF) shl 48)
@@ -155,6 +199,8 @@ class ByteBuf(
                     or ((getByte().toLong() and 0xFF) shl 8)
                     or (getByte().toLong() and 0xFF)
             )
+
+    fun getULong(): ULong = getLong().toULong()
 
     fun getVarLong(): Long {
         var v = 0L
@@ -176,6 +222,8 @@ class ByteBuf(
 
         return v
     }
+
+    fun getUVarLong(): ULong = getVarLong().toULong()
 
     fun getFloat(): Float = Float.fromBits(getInt())
 
@@ -205,7 +253,7 @@ class ByteBuf(
     override fun toString(): String = "[$buffer, $pointer]"
 
 
-    data class Builder(
+    class Builder(
         private val buf: ByteBuf = ByteBuf()
     ) {
 
@@ -224,8 +272,20 @@ class ByteBuf(
             return this
         }
 
+        fun putUByte(ub: UByte): Builder {
+            buf.putUByte(ub)
+
+            return this
+        }
+
         fun putShort(s: Short): Builder {
             buf.putShort(s)
+
+            return this
+        }
+
+        fun putUShort(us: UShort): Builder {
+            buf.putUShort(us)
 
             return this
         }
@@ -236,8 +296,20 @@ class ByteBuf(
             return this
         }
 
+        fun putUInt(ui: UInt): Builder {
+            buf.putUInt(ui)
+
+            return this
+        }
+
         fun putVarInt(i: Int): Builder {
             buf.putVarInt(i)
+
+            return this
+        }
+
+        fun putUVarInt(ui: UInt): Builder {
+            buf.putUVarInt(ui)
 
             return this
         }
@@ -248,8 +320,20 @@ class ByteBuf(
             return this
         }
 
+        fun putULong(ul: ULong): Builder {
+            buf.putULong(ul)
+
+            return this
+        }
+
         fun putVarLong(l: Long): Builder {
             buf.putVarLong(l)
+
+            return this
+        }
+
+        fun putUVarLong(ul: ULong): Builder {
+            buf.putUVarLong(ul)
 
             return this
         }
@@ -262,6 +346,12 @@ class ByteBuf(
 
         fun putDouble(d: Double): Builder {
             buf.putDouble(d)
+
+            return this
+        }
+
+        fun putBoolean(bl: Boolean): Builder {
+            buf.putBoolean(bl)
 
             return this
         }
@@ -284,7 +374,7 @@ class ByteBuf(
     }
 
 
-    data class Lookup(
+    class Lookup(
         private val buf: ByteBuf
     ) {
 
@@ -293,15 +383,27 @@ class ByteBuf(
 
         fun getByte(): Byte = buf.getByte()
 
+        fun getUByte(): UByte = buf.getUByte()
+
         fun getShort(): Short = buf.getShort()
+
+        fun getUShort(): UShort = buf.getUShort()
 
         fun getInt(): Int = buf.getInt()
 
+        fun getUInt(): UInt = buf.getUInt()
+
         fun getVarInt(): Int = buf.getVarInt()
+
+        fun getUVarInt(): UInt = buf.getUVarInt()
 
         fun getLong(): Long = buf.getLong()
 
+        fun getULong(): ULong = buf.getULong()
+
         fun getVarLong(): Long = buf.getVarLong()
+
+        fun getUVarLong(): ULong = buf.getUVarLong()
 
         fun getFloat(): Float = buf.getFloat()
 

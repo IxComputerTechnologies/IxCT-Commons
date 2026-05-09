@@ -6,13 +6,13 @@ package net.ixct.ixct_commons.util
 
 class Profiler : AutoCloseable {
 
-    private val start: Long = System.nanoTime()
+    private val start: ULong = System.nanoTime().toULong()
     private val stack: ArrayDeque<Long> = ArrayDeque()
 
 
-    fun startedAt(): Long = start
+    fun startedAt(): ULong = start
 
-    fun activeFor(): Long = System.nanoTime() - start
+    fun activeFor(): ULong = System.nanoTime().toULong() - start
 
     fun push(): Profiler {
         stack.addLast(System.nanoTime())
@@ -20,9 +20,9 @@ class Profiler : AutoCloseable {
         return this
     }
 
-    fun pop(): Long = System.nanoTime() - stack.removeLast()
+    fun pop(): ULong = System.nanoTime().toULong() - stack.removeLast().toULong()
 
-    fun measure(block: () -> Unit): Long {
+    fun measure(block: () -> Unit): ULong {
         push()
         block()
 
