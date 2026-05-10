@@ -65,10 +65,12 @@ class ByteBuf(
         var v = i
 
         while (v and 0xFFFFFF80.toInt() != 0) {
+            allocate(1)
             putByte(((v and 0x7F) or 0x80).toByte())
             v = v ushr 7
         }
 
+        allocate(1)
         putByte((v and 0x7F).toByte())
 
         return this
@@ -141,6 +143,15 @@ class ByteBuf(
     fun putString(s: String): ByteBuf {
         val bytes = s.toByteArray(Charsets.UTF_8)
         putVarInt(bytes.size)
+        bytes.forEach(this::putByte)
+
+        return this
+    }
+
+    fun allocateAndPutString(s: String): ByteBuf {
+        val bytes = s.toByteArray(Charsets.UTF_8)
+        putVarInt(bytes.size)
+        allocate(bytes.size)
         bytes.forEach(this::putByte)
 
         return this
@@ -364,6 +375,12 @@ class ByteBuf(
 
         fun putString(s: String): Builder {
             buf.putString(s)
+
+            return this
+        }
+
+        fun allocateAndPutString(s: String): Builder {
+            buf.allocateAndPutString(s)
 
             return this
         }
