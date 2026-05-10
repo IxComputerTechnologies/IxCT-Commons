@@ -276,6 +276,8 @@ class ByteBuf(
 
     fun toArray(): ByteArray = buffer.toByteArray()
 
+    fun copyRemaining(): ByteBuf = ByteBuf(ArrayList(buffer.subList(pointer, size())))
+
     override fun close() {
         buffer.clear()
         pointer = 0
