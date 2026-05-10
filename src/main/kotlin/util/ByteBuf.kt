@@ -407,14 +407,14 @@ class ByteBuf(
             return this
         }
 
-        fun putBytes(bytes: ByteArray): Builder {
-            buf.putBytes(bytes)
+        fun putBytes(buf: ByteBuf): Builder {
+            this.buf.putBytes(buf)
 
             return this
         }
 
-        fun putBytes(buf: ByteBuf): Builder {
-            buf.putBytes(buf)
+        fun putBytes(bytes: ByteArray): Builder {
+            buf.putBytes(bytes)
 
             return this
         }
