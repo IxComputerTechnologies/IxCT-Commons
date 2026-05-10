@@ -145,7 +145,7 @@ class ByteBuf(
     fun putString(s: String): ByteBuf {
         val bytes = s.toByteArray(Charsets.UTF_8)
         putVarInt(bytes.size)
-        bytes.forEach(this::putByte)
+        putBytes(bytes)
 
         return this
     }
@@ -155,6 +155,12 @@ class ByteBuf(
         putVarInt(bytes.size)
         allocate(bytes.size)
         bytes.forEach(this::putByte)
+
+        return this
+    }
+
+    fun putBytes(buf: ByteBuf): ByteBuf {
+        putBytes(buf.buffer)
 
         return this
     }
@@ -401,6 +407,12 @@ class ByteBuf(
 
         fun putBytes(bytes: ByteArray): Builder {
             buf.putBytes(bytes)
+
+            return this
+        }
+
+        fun putBytes(buf: ByteBuf): Builder {
+            buf.putBytes(buf)
 
             return this
         }
