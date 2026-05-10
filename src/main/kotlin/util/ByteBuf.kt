@@ -4,7 +4,7 @@
 
 package net.ixct.ixct_commons.util
 
-class ByteBuf(
+data class ByteBuf(
     private val buffer: ArrayList<Byte> = ArrayList()
 ) : AutoCloseable {
 
@@ -286,7 +286,7 @@ class ByteBuf(
     override fun toString(): String = "[$buffer, $pointer]"
 
 
-    class Builder(
+    data class Builder(
         private val buf: ByteBuf = ByteBuf()
     ) {
 
@@ -431,7 +431,7 @@ class ByteBuf(
     }
 
 
-    class Lookup(
+    data class Lookup(
         private val buf: ByteBuf
     ) {
 
