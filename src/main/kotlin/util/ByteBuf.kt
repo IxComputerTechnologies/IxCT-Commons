@@ -12,6 +12,8 @@ class ByteBuf(
 
     constructor(size: Int) : this(ArrayList(size))
 
+    constructor(bytes: ByteArray) : this(ArrayList(bytes.asList()))
+
 
     fun size(): Int = buffer.size
 
@@ -153,6 +155,18 @@ class ByteBuf(
         putVarInt(bytes.size)
         allocate(bytes.size)
         bytes.forEach(this::putByte)
+
+        return this
+    }
+
+    fun putBytes(bytes: ByteArray): ByteBuf {
+        putBytes(bytes.asList())
+
+        return this
+    }
+
+    fun putBytes(bytes: Collection<Byte>): ByteBuf {
+        buffer.addAll(bytes)
 
         return this
     }
@@ -381,6 +395,18 @@ class ByteBuf(
 
         fun allocateAndPutString(s: String): Builder {
             buf.allocateAndPutString(s)
+
+            return this
+        }
+
+        fun putBytes(bytes: ByteArray): Builder {
+            buf.putBytes(bytes)
+
+            return this
+        }
+
+        fun putBytes(bytes: Collection<Byte>): Builder {
+            buf.putBytes(bytes)
 
             return this
         }
